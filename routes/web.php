@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,4 +37,17 @@ Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name(
 Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
 Route::post('products', [ProductController::class, 'store'])->name('products.store');
 Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+
+
+Route::get('/register' , [UserController::class , 'create'])->name('register');
+Route::get('/login' , [UserController::class , 'login'])->name('login');
+Route::get('/index' , [UserController::class , 'index'])->name('user.index')->middleware('auth');
+Route::post('/users/authenticate' , [UserController::class , 'authenticate'])->name('authenticate');
+Route::post('/users' , [UserController::class , 'store'])->name('store_user');
+Route::get('/logout' , [UserController::class , 'logout'])->name('logout')->middleware('auth');
+
+Route::get('students/create',[StudentController::class,'create']);
+Route::post('students',[StudentController::class,'store'])->name('students.store');
+Route::get('/index' , [StudentController::class , 'index'])->name('students.index');
 
