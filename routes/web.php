@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StudentController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,26 @@ use App\Http\Controllers\StudentController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+    ], function(){ 
+
+        
+
+        Route::get('/signup' , [UserController::class , 'create'])->name('register');
+        Route::get('/login' , [UserController::class , 'login'])->name('login');
+        Route::get('/index' , [UserController::class , 'index'])->name('user.index')->middleware('auth');
+        Route::post('/users/authenticate' , [UserController::class , 'authenticate'])->name('authenticate');
+        Route::post('/users' , [UserController::class , 'store'])->name('store_user');
+        Route::get('/logout' , [UserController::class , 'logout'])->name('logout')->middleware('auth');
+
+
+    });
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,13 +60,6 @@ Route::post('products', [ProductController::class, 'store'])->name('products.sto
 Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 
-
-Route::get('/register' , [UserController::class , 'create'])->name('register');
-Route::get('/login' , [UserController::class , 'login'])->name('login');
-Route::get('/index' , [UserController::class , 'index'])->name('user.index')->middleware('auth');
-Route::post('/users/authenticate' , [UserController::class , 'authenticate'])->name('authenticate');
-Route::post('/users' , [UserController::class , 'store'])->name('store_user');
-Route::get('/logout' , [UserController::class , 'logout'])->name('logout')->middleware('auth');
 
 Route::get('students/create',[StudentController::class,'create']);
 Route::post('students',[StudentController::class,'store'])->name('students.store');

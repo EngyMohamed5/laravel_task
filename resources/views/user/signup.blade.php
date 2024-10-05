@@ -7,18 +7,36 @@
     <title>Document</title>
 </head>
 <body>
+    @include('sweetalert::alert')
+    @if( app()->getLocale() =='ar')
+    <style>
+       input {
+    direction: rtl;
+    text-align: right;
+    }
+    </style>
+    @endif
+    <ul>
+        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+            <li>
+                <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                    {{ $properties['native'] }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
 
     <h2>Sign Up</h2>
     <form action="{{ route('store_user') }}" method="POST">
         @csrf
         <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+        <input type="text" id="name" name="name" placeholder="{{ __('webside/signup.name') }}" required>
 
         <label for="email">Email address</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <input type="email" id="email" name="email" placeholder=" {{ __('webside/signup.email') }}" required>
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <input type="password" id="password" name="password" placeholder=" {{ __('webside/signup.password') }}" required>
 
         <button type="submit">Sign Up</button>
     </form>
